@@ -1,5 +1,6 @@
 <?php
 include_once '../inc/header.php';
+$products = $product->get_all_product();
 ?>
 <section class="content-main">
     <div class="content-header">
@@ -8,7 +9,7 @@ include_once '../inc/header.php';
         </div>
         <div>
             <a href="./client/page-add-product.php" class="btn btn-primary btn-sm rounded">Thêm sản phẩm</a>
-            <a href="index.php?pg=products-excel" class="btn btn-primary btn-sm rounded">Xuất file excel</a>
+            <a href="./client/excel.php" class="btn btn-primary btn-sm rounded">Xuất file excel</a>
         </div>
     </div>
     <div class="card mb-4">
@@ -32,7 +33,7 @@ include_once '../inc/header.php';
                         <tr>
                             <th width="9%">STT</th>
                             <th>Sản phẩm</th>
-                            <th style="padding-left: 165px;">Giá</th>
+                            <th style="padding-left: 255px;">Giá</th>
                             <th style="padding-right: 40px;">Giá gốc</th>
                             <th style="padding-right: 280px;">Mô tả</th>
                             <th class="text-end"> Action </th>
@@ -41,32 +42,40 @@ include_once '../inc/header.php';
                     </thead>
                 </table>
             </div>
+            <?php
+            if (isset($products)) {
+                if ($products && $products->num_rows > 0) {
+                    $i = 0;
+                    while ($results = $products->fetch_assoc()) {
+                        # code...
+            ?>
             <article class="itemlist">
                 <div class="row align-items-center">
                     <div class="col-lg-1 col-quantity">
-                        <span>62</span>
+                        <span><?php echo $results['id'] ?></span>
                     </div>
                     <div class="col-lg-2 col-sm-4 col-8 flex-grow-1 col-name">
                         <a class="itemside" href="#">
                             <div class="left">
-                                <img src="uploads/avatar.png" class="img-sm img-thumbnail" alt="Item">
+                                <img src="./upload/<?php echo $results['image'] ?>" class="img-sm img-thumbnail"
+                                    alt="Item">
                             </div>
                             <div class="info">
-                                <h6 class="mb-0">áo dai</h6>
+                                <h6 class="mb-0"><?php echo $results['name'] ?></h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-lg-1 col-sm-2 col-4 col-price">
-                        <span><span>345</span></span>
+                        <span><span><?php echo $results['price'] ?></span></span>
                     </div>
                     <div class="col-lg-1 col-sm-2 col-4 col-old_price">
-                        <span><del><span>87.654</span></del></span>
+                        <span><del><span><?php echo $results['old_price'] ?></span></del></span>
                     </div>
                     <div class="col-lg-5 col-sm-2 col-4 col-describe">
-                        <p>ácdfvd</p>
+                        <p><?php echo $results['description'] ?></p>
                     </div>
                     <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
-                        <a href="./client/page-update-product.php" class="btn btn-sm font-sm rounded btn-brand">
+                        <a href="./client/page-update-product.php?id=1" class="btn btn-sm font-sm rounded btn-brand">
                             <i class="material-icons md-edit"></i>Sửa</a>
                         <a href="index.php?pg=delproduct&id=62" class="btn btn-sm font-sm btn-light rounded">
                             <i class="material-icons md-delete_forever"></i>Xóa
@@ -77,151 +86,18 @@ include_once '../inc/header.php';
                     <input hidden type="checkbox" name="hot" class="form-control1">
                 </div>
             </article>
-            <article class="itemlist">
-                <div class="row align-items-center">
-                    <div class="col-lg-1 col-quantity">
-                        <span>63</span>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a class="itemside" href="#">
-                            <div class="left">
-                                <img src="uploads/pd1.jpg" class="img-sm img-thumbnail" alt="Item">
-                            </div>
-                            <div class="info">
-                                <h6 class="mb-0">[N1] CLONE TIKTOK - Hàng Ngâm Tháng 5/2022 Không Hỗ Trợ Đặt Đơn
-                                    - API 6</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-price">
-                        <span><span>123</span></span>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-old_price">
-                        <span><del><span>123</span></del></span>
-                    </div>
-                    <div class="col-lg-5 col-sm-2 col-4 col-describe">
-                        <p>123</p>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
-                        <a href="./client/page-update-product.php" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i>Sửa</a>
-                        <a href="index.php?pg=delproduct&id=63" class="btn btn-sm font-sm btn-light rounded">
-                            <i class="material-icons md-delete_forever"></i>Xóa
-                        </a>
-                    </div>
-                    <input hidden type="checkbox" name="best" class="form-control1">
-                    <input hidden type="checkbox" name="new" class="form-control1">
-                    <input hidden type="checkbox" name="hot" class="form-control1">
-                </div>
-            </article>
-            <article class="itemlist">
-                <div class="row align-items-center">
-                    <div class="col-lg-1 col-quantity">
-                        <span>64</span>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a class="itemside" href="#">
-                            <div class="left">
-                                <img src="uploads/book.jpg" class="img-sm img-thumbnail" alt="Item">
-                            </div>
-                            <div class="info">
-                                <h6 class="mb-0">quần size xl</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-price">
-                        <span><span>10.000</span></span>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-old_price">
-                        <span><del><span>20.000</span></del></span>
-                    </div>
-                    <div class="col-lg-5 col-sm-2 col-4 col-describe">
-                        <p>qưertygv</p>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
-                        <a href="./client/page-update-product.php" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i>Sửa</a>
-                        <a href="index.php?pg=delproduct&id=64" class="btn btn-sm font-sm btn-light rounded">
-                            <i class="material-icons md-delete_forever"></i>Xóa
-                        </a>
-                    </div>
-                    <input hidden type="checkbox" name="best" class="form-control1">
-                    <input hidden type="checkbox" name="new" class="form-control1">
-                    <input hidden type="checkbox" name="hot" class="form-control1">
-                </div>
-            </article>
-            <article class="itemlist">
-                <div class="row align-items-center">
-                    <div class="col-lg-1 col-quantity">
-                        <span>65</span>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a class="itemside" href="#">
-                            <div class="left">
-                                <img src="uploads/188485.jpg" class="img-sm img-thumbnail" alt="Item">
-                            </div>
-                            <div class="info">
-                                <h6 class="mb-0">quan ao</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-price">
-                        <span><span>100.000</span></span>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-old_price">
-                        <span><del><span>200.000</span></del></span>
-                    </div>
-                    <div class="col-lg-5 col-sm-2 col-4 col-describe">
-                        <p>em quang </p>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
-                        <a href="./client/page-update-product.php" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i>Sửa</a>
-                        <a href="index.php?pg=delproduct&id=65" class="btn btn-sm font-sm btn-light rounded">
-                            <i class="material-icons md-delete_forever"></i>Xóa
-                        </a>
-                    </div>
-                    <input hidden type="checkbox" name="best" class="form-control1">
-                    <input hidden type="checkbox" name="new" class="form-control1">
-                    <input hidden type="checkbox" name="hot" class="form-control1">
-                </div>
-            </article>
-            <article class="itemlist">
-                <div class="row align-items-center">
-                    <div class="col-lg-1 col-quantity">
-                        <span>66</span>
-                    </div>
-                    <div class="col-lg-2 col-sm-4 col-8 flex-grow-1 col-name">
-                        <a class="itemside" href="#">
-                            <div class="left">
-                                <img src="uploads/big-product2.jpg" class="img-sm img-thumbnail" alt="Item">
-                            </div>
-                            <div class="info">
-                                <h6 class="mb-0">quan zin</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-price">
-                        <span><span>12.000</span></span>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-old_price">
-                        <span><del><span>200.000</span></del></span>
-                    </div>
-                    <div class="col-lg-5 col-sm-2 col-4 col-describe">
-                        <p>ẻtyukjhgfds</p>
-                    </div>
-                    <div class="col-lg-1 col-sm-2 col-4 col-action text-end">
-                        <a href="./client/page-update-product.php" class="btn btn-sm font-sm rounded btn-brand">
-                            <i class="material-icons md-edit"></i>Sửa</a>
-                        <a href="index.php?pg=delproduct&id=66" class="btn btn-sm font-sm btn-light rounded">
-                            <i class="material-icons md-delete_forever"></i>Xóa
-                        </a>
-                    </div>
-                    <input hidden type="checkbox" name="best" class="form-control1">
-                    <input hidden type="checkbox" name="new" class="form-control1">
-                    <input hidden type="checkbox" name="hot" class="form-control1">
-                </div>
-            </article>
+            <?php
+                        $i++;
+                    }
+                } else {
+                    ?>
+            <?php
+                }
+            } else {
+                ?>
+            <?php
+            }
+            ?>
         </div>
         <!-- card-body end// -->
     </div>

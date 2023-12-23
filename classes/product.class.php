@@ -1,7 +1,6 @@
 <?php
 include_once __DIR__ . '/../lib/database.php';
 
-
 ?>
 
 
@@ -17,84 +16,108 @@ class product
     }
     public function insert_product($data)
     {
-        $categoryname = mysqli_real_escape_string($this->db->link, $data['categoryname']);
+        $name = mysqli_real_escape_string($this->db->link, $data['name']);
+        $price = mysqli_real_escape_string($this->db->link, $data['price']);
+        $old_price = mysqli_real_escape_string($this->db->link, $data['old_price']);
+        $description = mysqli_real_escape_string($this->db->link, $data['description']);
+        $description2 = mysqli_real_escape_string($this->db->link, $data['description2']);
+        $image = $_FILES['image']['name'];
+        $image_tmp = $_FILES['image']['tmp_name'];
+        $image_path = '../upload/' . $image;
 
-        if (empty($categoryname)) {
-            $arlet = "<div class='alert alert-danger' role='alert'>Category must not be empty</div>";
+        if (empty($name)) {
+            $arlet = "<div class='alert alert-danger' role='alert'>Name must not be empty</div>";
             return $arlet;
         } else {
-            $query = "INSERT INTO tbl_product(categoryname) VALUES ('$categoryname')";
+            move_uploaded_file($image_tmp, $image_path);
+            $query = "INSERT INTO products (name,image ,price, old_price, description,description2) VALUES ('$name', '$image', '$price', '$old_price', '$description', '$description2')";
             $result = $this->db->insert($query);
             if ($result) {
-                $arlet = "<div class='alert alert-success' role='alert'>Insert Category Successfully</div>";
+                $arlet = "<div class='alert alert-success' role='alert'>Insert Product Successfully</div>";
+                echo "<script>window.location.href = './client/home.php';</script>";
+
                 return $arlet;
             } else {
-                $arlet = "<div class='alert alert-danger' role='alert'>Insert Category Successfully</div>";
+                $arlet = "<div class='alert alert-danger' role='alert'>Failed to insert Product</div>";
                 return $arlet;
             }
         }
     }
 
-    public function show_product()
+    public function get_product_by_id($id)
     {
-        $query = "SELECT * FROM clone_product order by brand_id desc";
-        $result = $this->db->select($query);
+        // Tạo câu truy vấn SELECT
+        $query = "SELECT * FROM products WHERE id='$id'";
 
+        // Thực thi câu truy vấn
+        $result = $this->db->select($query);
         return $result;
     }
+    public function get_all_product()
+    {
+        // Tạo câu truy vấn SELECT
+        $query = "SELECT * FROM products ";
 
+        // Thực thi câu truy vấn
+        $result = $this->db->select($query);
+        return $result;
+    }
 
     public function update_product($data, $id)
     {
-        $categoryname = mysqli_real_escape_string($this->db->link, $data['categoryname']);
-        $id = mysqli_real_escape_string($this->db->link, $id);
+        $name = mysqli_real_escape_string($this->db->link, $data['name']);
+        $price = mysqli_real_escape_string($this->db->link, $data['price']);
+        $old_price = mysqli_real_escape_string($this->db->link, $data['old_price']);
+        $description = mysqli_real_escape_string($this->db->link, $data['description']);
+        $description2 = mysqli_real_escape_string($this->db->link, $data['description2']);
+        $image = $_FILES['image']['name'];
+        $image_tmp = $_FILES['image']['tmp_name'];
+        $image_path = '../upload/' . $image;
 
-        if (empty($categoryname)) {
-            $arlet = "<div class='alert alert-danger' role='alert'>Category name empty</div>";
-            return $arlet;
-        } else {
-            $query = "UPDATE tbl_product SET categoryname = '$categoryname' WHERE categoryid = '$id'";
-            $result = $this->db->update($query);
-            if ($result) {
-                $arlet = "<div class='alert alert-success' role='alert'>Update Category Successfully</div>";
-                return $arlet;
-            } else {
-                $arlet = "<div class='alert alert-danger' role='alert'>Error</div>";
-
-                return $arlet;
-            }
+        // Kiểm tra xem có tệp tin ảnh mới được tải lên hay không
+        if (!empty($image_tmp)) {
+            // Di chuyển tệp tin ảnh mới
+            move_uploaded_file($image_tmp, $image_path);
         }
-    }
-    public function delete_product($id)
-    {
-        $id = mysqli_real_escape_string($this->db->link, $id);
-        $query = "DELETE FROM tbl_product WHERE categoryid = '$id'";
-        $result = $this->db->delete($query);
 
+        // Tạo câu truy vấn UPDATE dựa trên các giá trị cập nhật
+        $query = "UPDATE products SET name='$name', price='$price', old_price='$old_price', description='$description', description2='$description2'";
+
+        // Thêm trường image vào câu truy vấn nếu có tệp tin ảnh mới được tải lên
+        if (!empty($image)) {
+            $query .= ", image='$image'";
+        }
+
+        $query .= " WHERE id='$id'";
+
+        // Thực thi câu truy vấn
+        $result = $this->db->update($query);
 
         if ($result) {
-            $arlet = "<div class='alert alert-success' role='alert'>Insert Category Successfully</div>";
+            $arlet = "<div class='alert alert-success' role='alert'>Update Product Successfully</div>";
+            echo "<script>window.location.href = './client/home.php';</script>";
             return $arlet;
         } else {
-            $arlet = "<div class='alert alert-danger' role='alert'>Insert Category Successfully</div>";
-
+            $arlet = "<div class='alert alert-danger' role='alert'>Failed to update Product</div>";
             return $arlet;
         }
     }
 
-    public function countProduct($id)
+    public function delete_product($id)
     {
-        $query = "SELECT COUNT(*) AS total FROM clone_product WHERE product_brand = '$id' AND product_selled = '0'";
-        $result = $this->db->select($query);
+        // Tạo câu truy vấn DELETE
+        $query = "DELETE FROM products WHERE id='$id'";
 
-        return $result;
-    }
-    public function countProductselled($id)
-    {
-        $query = "SELECT COUNT(*) AS total FROM clone_product WHERE product_brand = '$id' AND product_selled = '1'";
-        $result = $this->db->select($query);
+        // Thực thi câu truy vấn
+        $result = $this->db->delete($query);
 
-        return $result;
+        if ($result) {
+            $arlet = "<div class='alert alert-success' role='alert'>Delete Product Successfully</div>";
+            return $arlet;
+        } else {
+            $arlet = "<div class='alert alert-danger' role='alert'>Failed to delete Product</div>";
+            return $arlet;
+        }
     }
 }
 ?>

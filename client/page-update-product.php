@@ -1,8 +1,21 @@
  <?php
     include_once '../inc/header.php';
+    $product_detail = $product->get_product_by_id($_GET['id']);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $product->update_product($_POST, $_GET['id']);
+    }
+
+    ?>
+
+ <?php
+    if (isset($product_detail)) {
+        if ($product_detail && $product_detail->num_rows > 0) {
+            $i = 0;
+            while ($results = $product_detail->fetch_assoc()) {
+                # code...
     ?>
  <section class="content-main">
-     <form action="index.php?pg=updateproduct" method="post" enctype="multipart/form-data">
+     <form action="" method="post" enctype="multipart/form-data">
          <div class="row">
              <div class="col-12">
                  <div class="content-header">
@@ -23,40 +36,41 @@
                      <div class="card-body">
                          <div class="mb-4">
                              <label class="form-label">Tên Sản Phẩm</label>
-                             <input type="text" name="name" placeholder="Type here" class="form-control"
-                                 id="product_name" value="áo dai">
+                             <input required type="text" name="name" placeholder="Type here" class="form-control"
+                                 id="product_name" value="<?php echo $results['name'] ?>">
                          </div>
                          <div class="row">
                              <div class="col-lg-4">
                                  <div class="mb-4">
                                      <label class="form-label">Giá Gốc</label>
                                      <div class="row gx-2">
-                                         <input placeholder="VND" type="number" name="old_price"
-                                             class="form-control form-input-number" value="87654">
+                                         <input required placeholder="VND" type="number" name="old_price"
+                                             class="form-control form-input-number"
+                                             value="<?php echo $results['old_price'] ?>">
                                      </div>
                                  </div>
                              </div>
                              <div class="col-lg-4">
                                  <div class="mb-4">
                                      <label class="form-label">Giá Đã Giảm</label>
-                                     <input placeholder="VND" type="number" name="price"
-                                         class="form-control form-input-number" value="345">
+                                     <input required placeholder="VND" type="number" name="price"
+                                         class="form-control form-input-number" value="<?php echo $results['price'] ?>">
                                  </div>
                              </div>
                          </div>
                          <div class="mb-4">
-                             <label class="form-label" for="describe1">Mô tả 1</label>
-                             <textarea name="describe1" id="describe1" cols="30" rows="10"
-                                 class="form-control"></textarea>
+                             <label class="form-label" for="description">Mô tả 1</label>
+                             <textarea required name="description" id="description" cols="30" rows="10"
+                                 class="form-control"><?php echo $results['description'] ?></textarea>
                              <script>
                              var Describe1 = "ácdfvd"
                              document.getElementById('describe1').value = Describe1;
                              </script>
                          </div>
                          <div class="mb-4">
-                             <label class="form-label" for="describe2">Mô tả 2</label>
-                             <textarea name="describe2" id="describe2" cols="30" rows="10"
-                                 class="form-control form-control1"></textarea>
+                             <label class="form-label" for="description2">Mô tả 2</label>
+                             <textarea required name="description2" id="description2" cols="30" rows="10"
+                                 class="form-control form-control1"><?php echo $results['description2'] ?></textarea>
                              <script>
                              // Sử dụng JavaScript để set giá trị cho thẻ textarea
                              var Describe2 = "ẻtyhjn"
@@ -76,8 +90,8 @@
                      </div>
                      <div class="card-body">
                          <div class="input-upload">
-                             <img src="uploads/avatar.png" alt="">
-                             <input class="form-control" type="file" name="img">
+                             <img src="./upload/<?php echo $results['image'] ?>" alt="">
+                             <input class="form-control" type="file" name="image">
                          </div>
                      </div>
                  </div>
@@ -88,7 +102,18 @@
          </div>
      </form>
  </section>
-
+ <?php
+                $i++;
+            }
+        } else {
+            ?>
+ <?php
+        }
+    } else {
+        ?>
+ <?php
+    }
+    ?>
  <?php
     include_once '../inc/footer.php';
     ?>

@@ -1,9 +1,14 @@
 <?php
 include_once '../inc/header.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $product->insert_product($_POST);
+}
+
 ?>
 
 <section class="content-main">
-    <form action="index.php?pg=addproduct" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-12">
                 <div class="content-header">
@@ -44,13 +49,13 @@ include_once '../inc/header.php';
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="describe1">Mô tả 1</label>
-                            <textarea name="describe1" id="describe1" cols="30" rows="10" class="form-control"
+                            <label class="form-label" for="description">Mô tả 1</label>
+                            <textarea name="description" id="description" cols="30" rows="10" class="form-control"
                                 required></textarea>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="describe2">Mô tả 2</label>
-                            <textarea name="describe2" id="describe2" cols="30" rows="10"
+                            <label class="form-label" for="description2">Mô tả 2</label>
+                            <textarea name="description2" id="description2" cols="30" rows="10"
                                 class="form-control form-control1" required></textarea>
                         </div>
 
@@ -67,13 +72,11 @@ include_once '../inc/header.php';
                     <div class="card-body">
                         <div class="input-upload">
                             <img src="assets/imgs/theme/upload.svg" alt="">
-                            <input class="form-control" type="file" name="img" required>
+                            <input class="form-control" type="file" name="image" required>
                         </div>
                     </div>
                 </div>
-                <!-- card end// -->
 
-                <!-- card end// -->
             </div>
         </div>
     </form>
